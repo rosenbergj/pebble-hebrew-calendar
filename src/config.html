@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hebrew Calendar</title>
+<style>
+  :root { color-scheme: light dark; --line: rgba(128, 128, 128, .25); --accent: #ff6b00; }
+  body { font: 16px system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; }
+  h1 { font-size: 22px; margin: 0 0 16px; }
+  label { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 0; border-top: 1px solid var(--line); }
+  label:last-of-type { border-bottom: 1px solid var(--line); }
+  input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); flex: 0 0 auto; }
+  #status { font-size: 13px; opacity: .7; margin: 12px 0 0; min-height: 1em; }
+</style>
+</head>
+<body>
+<h1>Hebrew Calendar</h1>
+<label><span>Second days of festivals</span><input type="checkbox" id="secondDays" disabled></label>
+<label><span>Hebrew script</span><input type="checkbox" id="hebrewScript" disabled></label>
+<p id="status">Loading…</p>
+<script>
+  var fields = ['secondDays', 'hebrewScript'];
+  var status = document.getElementById('status');
+
+  function show(settings) {
+    fields.forEach(function (name) {
+      var box = document.getElementById(name);
+      box.checked = !!settings[name];
+      box.disabled = false;
+    });
+    status.textContent = '';
+  }
+
+  fields.forEach(function (name) {
+    document.getElementById(name).onchange = function (event) {
+      var change = { type: 'set' };
+      change[name] = event.target.checked;
+      Pebble.sendMessage('plugin', change).then(show, function () {
+        status.textContent = 'Couldn’t save. Try again.';
+      });
+    };
+  });
+
+  Pebble.addEventListener('ready', function (event) {
+    if (event.target !== 'plugin') return;
+    Pebble.sendMessage('plugin', { type: 'get' }).then(show, function () {
+      status.textContent = 'Couldn’t reach the plugin.';
+    });
+  });
+</script>
+</body>
+</html>

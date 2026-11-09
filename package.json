@@ -1,0 +1,68 @@
+{
+  "name": "pebble-hebrew-calendar",
+  "author": "Josh Rosenberg",
+  "version": "0.1.0",
+  "keywords": ["pebble-plugin"],
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node test/test.js && node test/handler.js"
+  },
+  "dependencies": {},
+  "pebble": {
+    "displayName": "Hebrew Calendar",
+    "uuid": "f9e9653e-f891-420b-b312-33e6a5f8a031",
+    "sdkVersion": "3",
+    "projectType": "plugin",
+    "configPage": "src/config.html",
+    "usesPermissions": [
+      {
+        "name": "Location",
+        "reason": "To find sunset, which is when the Hebrew date changes, at your weather locations and where you are",
+        "required": true
+      }
+    ],
+    "plugin": {
+      "description": "The Hebrew date and holidays, and sunrise, sunset and nightfall (tzeit), for each of the user's weather locations (the phone's position for the current-location one). The date changes at the place's sunset. Computed on the phone; nothing is sent anywhere.",
+      "script": "src/plugin/index.js",
+      "sources": [
+        {
+          "category": "hebrew_calendar",
+          "items": ["date"],
+          "properties": {
+            "name": ["shortText"],
+            "date": ["shortText", "longText"],
+            "day": ["numericValue"],
+            "month": ["numericValue"],
+            "month_name": ["shortText"],
+            "year": ["numericValue"],
+            "holiday": ["shortText", "longText"],
+            "rosh_chodesh": ["boolean"],
+            "shabbat_or_yom_tov_today": ["boolean"],
+            "shabbat_or_yom_tov_tonight": ["boolean"]
+          },
+          "callerPermissions": ["Location"],
+          "suggestedRefreshIntervalSec": 600
+        },
+        {
+          "category": "hebrew_calendar",
+          "items": ["times"],
+          "properties": {
+            "name": ["shortText"],
+            "sunrise": ["timestamp"],
+            "sunset": ["timestamp"],
+            "tzeit": ["timestamp"],
+            "next": ["shortText", "longText"],
+            "next_time": ["timestamp"],
+            "utc_offset": ["numericValue"],
+            "daily_sunrise": ["series.timestamp"],
+            "daily_sunset": ["series.timestamp"],
+            "daily_tzeit": ["series.timestamp"]
+          },
+          "callerPermissions": ["Location"],
+          "suggestedRefreshIntervalSec": 600
+        }
+      ]
+    }
+  }
+}
