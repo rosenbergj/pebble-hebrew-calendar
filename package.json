@@ -36,7 +36,7 @@
             "month": ["numericValue"],
             "month_name": ["shortText"],
             "year": ["numericValue"],
-            "holiday": ["shortText", "longText"],
+            "holiday": ["longText"],
             "rosh_chodesh": ["boolean"],
             "shabbat_or_yom_tov_today": ["boolean"],
             "shabbat_or_yom_tov_tonight": ["boolean"]

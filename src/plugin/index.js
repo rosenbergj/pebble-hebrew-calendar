@@ -515,7 +515,7 @@ function dateProperties(c, settings) {
   };
   if (c.holidays.length) {
     var names = c.holidays.map(function (entry) { return holidayText(entry, s); });
-    props.holiday = { shortText: { text: names[0] }, longText: { text: names.join(', ') } };
+    props.holiday = { longText: { text: names.join(', ') } };
   }
   return props;
 }

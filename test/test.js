@@ -251,6 +251,10 @@ check('date properties, both scripts', function () {
   assert.strictEqual(hebrew.date.shortText.text, "ג' כסלו");
   assert.strictEqual(hebrew.date.longText.text, 'ג\' כסלו תשפ"ז');
   assert.strictEqual(latin.holiday, undefined);
+  // Chanukah 6 on Rosh Chodesh Tevet: both names, in longText only.
+  var both = cal.dateProperties(cal.compute(est(2026, 12, 10, 10), PHILLY, ON), ON);
+  assert.ok(/^Chanukah 6, Rosh Chodesh Tevet/.test(both.holiday.longText.text), both.holiday.longText.text);
+  assert.strictEqual(both.holiday.shortText, undefined);
 });
 
 check('solar offset estimate', function () {

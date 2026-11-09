@@ -26,7 +26,7 @@ The Hebrew date changes at **sunset** at each place. On a day when the sun doesn
 | `date` | shortText, longText | `3 Kislev` / `3 Kislev 5787`, or in Hebrew script |
 | `day`, `month`, `year` | numericValue | Months count from Nisan (1) to Adar 2 (13); Tishrei is 7 |
 | `month_name` | shortText | |
-| `holiday` | shortText, longText | Absent on an ordinary day. A date can have two, such as `Chanukah 6, Rosh Chodesh Tevet`: shortText gives the first, longText gives both |
+| `holiday` | longText | Absent on an ordinary day. A date can have two, such as `Chanukah 6, Rosh Chodesh Tevet` |
 | `rosh_chodesh` | boolean | |
 | `shabbat_or_yom_tov_today` | boolean | Whether today's daytime, by the civil calendar, is Shabbat or yom tov |
 | `shabbat_or_yom_tov_tonight` | boolean | Whether one begins or continues at this evening's sunset |
