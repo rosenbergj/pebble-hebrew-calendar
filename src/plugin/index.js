@@ -442,6 +442,14 @@ function compute(nowMs, place, settings) {
   });
   events.sort(function (a, b) { return a.t - b.t; });
   var next = events.filter(function (e) { return e.t > nowMs; })[0] || null;
+  // The next of each kind, searching the whole week, since near the poles one can be days off.
+  var nextOf = {};
+  ['sunrise', 'sunset', 'tzeit'].forEach(function (name) {
+    nextOf[name] = null;
+    for (var i = 0; i < days.length && nextOf[name] === null; i++) {
+      if (days[i].sun[name] !== null && days[i].sun[name] > nowMs) nextOf[name] = days[i].sun[name];
+    }
+  });
 
   return {
     hebrew: h,
@@ -455,6 +463,7 @@ function compute(nowMs, place, settings) {
     days: days.slice(0, DAYS),
     sun: today,
     next: next,
+    nextOf: nextOf,
     // When any of the above next changes: the next sun event, or midnight.
     validUntil: Math.min(next ? next.t : Infinity, days[1].midnight),
   };
@@ -527,6 +536,7 @@ function timeProperties(c, place, settings, clock) {
   };
   ['sunrise', 'sunset', 'tzeit'].forEach(function (name) {
     if (c.sun[name] !== null) props[name] = { timestamp: { value: stamp(c.sun[name]) } };
+    if (c.nextOf[name] !== null) props['next_' + name] = { timestamp: { value: stamp(c.nextOf[name]) } };
   });
   if (c.next) {
     var label = EVENT_NAMES[c.next.name][script(settings)];

@@ -204,6 +204,11 @@ check('next event and when to recompute', function () {
   var props = cal.timeProperties(c, PHILLY, ON, '12h');
   assert.ok(/^Sunset 4:4\d PM$/.test(props.next.shortText.text), props.next.shortText.text);
   assert.strictEqual(props.daily_tzeit.series.timestamp.values.length, 7);
+  // At noon, the next sunrise is tomorrow's, while sunset and tzeit are today's.
+  assert.strictEqual(props.next_sunrise.timestamp.value, Math.round(c.days[1].sun.sunrise / 1000));
+  assert.strictEqual(props.next_sunset.timestamp.value, props.sunset.timestamp.value);
+  assert.strictEqual(props.next_tzeit.timestamp.value, props.tzeit.timestamp.value);
+  assert.ok(props.next_sunrise.timestamp.value > props.sunrise.timestamp.value);
 });
 
 check('polar: no sunset, so the date rolls over at midnight', function () {

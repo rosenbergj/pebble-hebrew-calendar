@@ -41,6 +41,7 @@ The holidays are the yom tovim, with their erev days and Chol HaMoed, plus Chanu
 | `sunrise`, `sunset`, `tzeit` | timestamp | Today's, local to the place. Absent when there isn't one |
 | `next` | shortText, longText | The next of those, e.g. `Sunset 4:47 PM`, in the user's 12h or 24h clock |
 | `next_time` | timestamp | When `next` happens |
+| `next_sunrise`, `next_sunset`, `next_tzeit` | timestamp | The next of each, today's or a later day's |
 | `utc_offset` | numericValue | Minutes east of UTC, as in `weather/location` |
 | `daily_sunrise`, `daily_sunset`, `daily_tzeit` | series.timestamp | Seven days from the place's local midnight; `null` where there's none |
 
