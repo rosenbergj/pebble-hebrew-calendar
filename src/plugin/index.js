@@ -484,12 +484,12 @@ function pad(n) {
   return (n < 10 ? '0' : '') + n;
 }
 
-/** Local wall-clock time at the place, in the user's 12h or 24h clock. */
-function clockText(ms, place, clock) {
+/** Local wall-clock time at the place, in the user's 12h or 24h clock; bare drops AM/PM. */
+function clockText(ms, place, clock, bare) {
   var d = new Date(ms + place.offsetAt(ms) * 60000);
   var h = d.getUTCHours(), m = d.getUTCMinutes();
   if (clock === '24h') return pad(h) + ':' + pad(m);
-  return ((h + 11) % 12 + 1) + ':' + pad(m) + (h < 12 ? ' AM' : ' PM');
+  return ((h + 11) % 12 + 1) + ':' + pad(m) + (bare ? '' : h < 12 ? ' AM' : ' PM');
 }
 
 function script(settings) {
@@ -545,8 +545,10 @@ function timeProperties(c, place, settings, clock) {
   [['next_sun', c.nextSun], ['next_sun_tzeit', c.nextSunTzeit]].forEach(function (pair) {
     var e = pair[1];
     if (!e) return;
-    var text = EVENT_NAMES[e.name][script(settings)] + ' ' + clockText(e.t, place, clock);
-    props[pair[0]] = { shortText: { text: text }, longText: { text: text } };
+    props[pair[0]] = {
+      shortText: { text: clockText(e.t, place, clock, true) },
+      longText: { text: EVENT_NAMES[e.name][script(settings)] + ' ' + clockText(e.t, place, clock) },
+    };
     props[pair[0] + '_time'] = { timestamp: { value: stamp(e.t) } };
   });
   return props;

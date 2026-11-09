@@ -39,7 +39,7 @@ The holidays are the yom tovim, with their erev days and Chol HaMoed, plus Chanu
 |---|---|---|
 | `name` | shortText | The place |
 | `sunrise`, `sunset`, `tzeit` | timestamp | Today's, local to the place. Absent when there isn't one |
-| `next_sun` | shortText, longText | The next sunrise or sunset, e.g. `Sunset 4:47 PM`, in the user's 12h or 24h clock |
+| `next_sun` | shortText, longText | The next sunrise or sunset, in the user's 12h or 24h clock: shortText `4:47`, longText `Sunset 4:47 PM` |
 | `next_sun_time` | timestamp | When `next_sun` happens |
 | `next_sun_tzeit` | shortText, longText | The next sunrise, sunset, or tzeit, written the same way |
 | `next_sun_tzeit_time` | timestamp | When `next_sun_tzeit` happens |
