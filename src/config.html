@@ -22,7 +22,7 @@
 <p id="status">Loading…</p>
 <script>
   var fields = ['secondDays', 'hebrewScript'];
-  var status = document.getElementById('status');
+  var statusLine = document.getElementById('status');
 
   function show(settings) {
     fields.forEach(function (name) {
@@ -30,7 +30,7 @@
       box.checked = !!settings[name];
       box.disabled = false;
     });
-    status.textContent = '';
+    statusLine.textContent = '';
   }
 
   fields.forEach(function (name) {
@@ -38,7 +38,7 @@
       var change = { type: 'set' };
       change[name] = event.target.checked;
       Pebble.sendMessage('plugin', change).then(show, function () {
-        status.textContent = 'Couldn’t save. Try again.';
+        statusLine.textContent = 'Couldn’t save. Try again.';
       });
     };
   });
@@ -46,7 +46,7 @@
   Pebble.addEventListener('ready', function (event) {
     if (event.target !== 'plugin') return;
     Pebble.sendMessage('plugin', { type: 'get' }).then(show, function () {
-      status.textContent = 'Couldn’t reach the plugin.';
+      statusLine.textContent = 'Couldn’t reach the plugin.';
     });
   });
 </script>
