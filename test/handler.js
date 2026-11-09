@@ -107,7 +107,7 @@ async function check(name, fn) {
     var p = load({ position: HERE, sources: { 'preferences/weather_location': LOCATIONS, 'preferences/units': UNITS } });
     var r = await ask(p, { category: 'hebrew_calendar', item: 'times' });
     var props = r.data.instances[0].properties;
-    assert.ok(/ \d\d:\d\d$/.test(props.next.shortText.text), props.next.shortText.text);
+    assert.ok(/ \d\d:\d\d$/.test(props.next_sun_tzeit.shortText.text), props.next_sun_tzeit.shortText.text);
     assert.strictEqual(props.daily_sunset.series.timestamp.values.length, 7);
     assert.strictEqual(props.date, undefined);
   });

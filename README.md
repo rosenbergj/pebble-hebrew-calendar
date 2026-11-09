@@ -39,11 +39,15 @@ The holidays are the yom tovim, with their erev days and Chol HaMoed, plus Chanu
 |---|---|---|
 | `name` | shortText | The place |
 | `sunrise`, `sunset`, `tzeit` | timestamp | Today's, local to the place. Absent when there isn't one |
-| `next` | shortText, longText | The next of those, e.g. `Sunset 4:47 PM`, in the user's 12h or 24h clock |
-| `next_time` | timestamp | When `next` happens |
+| `next_sun` | shortText, longText | The next sunrise or sunset, e.g. `Sunset 4:47 PM`, in the user's 12h or 24h clock |
+| `next_sun_time` | timestamp | When `next_sun` happens |
+| `next_sun_tzeit` | shortText, longText | The next sunrise, sunset, or tzeit, written the same way |
+| `next_sun_tzeit_time` | timestamp | When `next_sun_tzeit` happens |
 | `next_sunrise`, `next_sunset`, `next_tzeit` | timestamp | The next of each, today's or a later day's |
 | `utc_offset` | numericValue | Minutes east of UTC, as in `weather/location` |
 | `daily_sunrise`, `daily_sunset`, `daily_tzeit` | series.timestamp | Seven days from the place's local midnight; `null` where there's none |
+
+Each `next_*` property covers only the times its name lists. If a later version adds more times, they get new properties, and these keep their meaning.
 
 Sunrise and sunset are when the sun's upper edge crosses the horizon, allowing for refraction. Tzeit is when the sun's center is 8.5° below the horizon. These times agree with PyEphem to within about 20 seconds.
 
@@ -52,7 +56,7 @@ Both sources require the caller to hold the Location permission, as `weather/loc
 ## Settings
 
 - **Second days of festivals** (on by default) keeps the second day of Sukkot, Shmini Atzeret/Simchat Torah, Pesach, and Shavuot.
-- **Hebrew script** (off by default) writes dates, month names, holidays, and the `next` label in Hebrew. In Hebrew script, the day and year are Hebrew numerals, like the ones for 29 and 5787, whose marks (geresh and gershayim) are written as ASCII `'` and `"`.
+- **Hebrew script** (off by default) writes dates, month names, holidays, and the `next_sun` and `next_sun_tzeit` labels in Hebrew. In Hebrew script, the day and year are Hebrew numerals, like the ones for 29 and 5787, whose marks (geresh and gershayim) are written as ASCII `'` and `"`.
 
   Watches have no Hebrew letters in their system fonts out of the box. To use Hebrew script, install the **English + עברית** font pack ("English + Hebrew glyphs"): in the Pebble app, tap your watch, then **Language → Add language pack**, and choose it under **Font packs**. Some watchfaces bring their own Hebrew font and don't need it.
 

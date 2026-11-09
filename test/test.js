@@ -196,13 +196,26 @@ check('Shabbat and yom tov, today and tonight', function () {
 
 check('next event and when to recompute', function () {
   var c = cal.compute(est(2026, 11, 13, 12), PHILLY, ON);
-  assert.strictEqual(c.next.name, 'sunset');
-  assert.strictEqual(c.validUntil, c.next.t);
+  assert.strictEqual(c.nextSun.name, 'sunset');
+  assert.strictEqual(c.nextSunTzeit.name, 'sunset');
+  assert.strictEqual(c.validUntil, c.nextSunTzeit.t);
+  // Between sunset and tzeit, the two disagree.
+  var dusk = cal.compute(est(2026, 11, 13, 17), PHILLY, ON);
+  assert.strictEqual(dusk.nextSun.name, 'sunrise');
+  assert.strictEqual(dusk.nextSunTzeit.name, 'tzeit');
+  assert.strictEqual(dusk.validUntil, dusk.nextSunTzeit.t);
+  var duskProps = cal.timeProperties(dusk, PHILLY, ON, '12h');
+  assert.ok(/^Sunrise 6:\d\d AM$/.test(duskProps.next_sun.shortText.text), duskProps.next_sun.shortText.text);
+  assert.ok(/^Tzeit 5:\d\d PM$/.test(duskProps.next_sun_tzeit.shortText.text), duskProps.next_sun_tzeit.shortText.text);
+  assert.strictEqual(duskProps.next_sun_time.timestamp.value, duskProps.next_sunrise.timestamp.value);
+  assert.strictEqual(duskProps.next_sun_tzeit_time.timestamp.value, duskProps.next_tzeit.timestamp.value);
   var late = cal.compute(est(2026, 11, 13, 23), PHILLY, ON);
-  assert.strictEqual(late.next.name, 'sunrise');
+  assert.strictEqual(late.nextSun.name, 'sunrise');
+  assert.strictEqual(late.nextSunTzeit.name, 'sunrise');
   assert.strictEqual(late.validUntil, est(2026, 11, 14, 0)); // midnight comes first
   var props = cal.timeProperties(c, PHILLY, ON, '12h');
-  assert.ok(/^Sunset 4:4\d PM$/.test(props.next.shortText.text), props.next.shortText.text);
+  assert.ok(/^Sunset 4:4\d PM$/.test(props.next_sun.shortText.text), props.next_sun.shortText.text);
+  assert.strictEqual(props.next_sun_tzeit.shortText.text, props.next_sun.shortText.text);
   assert.strictEqual(props.daily_tzeit.series.timestamp.values.length, 7);
   // At noon, the next sunrise is tomorrow's, while sunset and tzeit are today's.
   assert.strictEqual(props.next_sunrise.timestamp.value, Math.round(c.days[1].sun.sunrise / 1000));

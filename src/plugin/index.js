@@ -441,7 +441,9 @@ function compute(nowMs, place, settings) {
       .forEach(function (pair) { if (pair[1] !== null) events.push({ name: pair[0], t: pair[1] }); });
   });
   events.sort(function (a, b) { return a.t - b.t; });
-  var next = events.filter(function (e) { return e.t > nowMs; })[0] || null;
+  var upcoming = events.filter(function (e) { return e.t > nowMs; });
+  var nextSunTzeit = upcoming[0] || null;
+  var nextSun = upcoming.filter(function (e) { return e.name !== 'tzeit'; })[0] || null;
   // The next of each kind, searching the whole week, since near the poles one can be days off.
   var nextOf = {};
   ['sunrise', 'sunset', 'tzeit'].forEach(function (name) {
@@ -462,10 +464,11 @@ function compute(nowMs, place, settings) {
     midnight: midnight,
     days: days.slice(0, DAYS),
     sun: today,
-    next: next,
+    nextSun: nextSun,
+    nextSunTzeit: nextSunTzeit,
     nextOf: nextOf,
-    // When any of the above next changes: the next sun event, or midnight.
-    validUntil: Math.min(next ? next.t : Infinity, days[1].midnight),
+    // When any of the above changes: the next sunrise, sunset, or tzeit, or midnight.
+    validUntil: Math.min(nextSunTzeit ? nextSunTzeit.t : Infinity, days[1].midnight),
   };
 }
 
@@ -538,12 +541,14 @@ function timeProperties(c, place, settings, clock) {
     if (c.sun[name] !== null) props[name] = { timestamp: { value: stamp(c.sun[name]) } };
     if (c.nextOf[name] !== null) props['next_' + name] = { timestamp: { value: stamp(c.nextOf[name]) } };
   });
-  if (c.next) {
-    var label = EVENT_NAMES[c.next.name][script(settings)];
-    var time = clockText(c.next.t, place, clock);
-    props.next = { shortText: { text: label + ' ' + time }, longText: { text: label + ' ' + time } };
-    props.next_time = { timestamp: { value: stamp(c.next.t) } };
-  }
+  // Each next_* covers a fixed set of times, so adding a time later never changes what one means.
+  [['next_sun', c.nextSun], ['next_sun_tzeit', c.nextSunTzeit]].forEach(function (pair) {
+    var e = pair[1];
+    if (!e) return;
+    var text = EVENT_NAMES[e.name][script(settings)] + ' ' + clockText(e.t, place, clock);
+    props[pair[0]] = { shortText: { text: text }, longText: { text: text } };
+    props[pair[0] + '_time'] = { timestamp: { value: stamp(e.t) } };
+  });
   return props;
 }
 
