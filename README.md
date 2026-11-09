@@ -26,10 +26,10 @@ The Hebrew date changes at **sunset** at each place. On a day when the sun doesn
 | `date` | shortText, longText | `3 Kislev` / `3 Kislev 5787`, or in Hebrew script |
 | `day`, `month`, `year` | numericValue | Months count from Nisan (1) to Adar 2 (13); Tishrei is 7 |
 | `month_name` | shortText | |
-| `holiday` | shortText, longText | Absent on an ordinary day. shortText is the first holiday; longText lists all of them, comma-separated |
+| `holiday` | shortText, longText | Absent on an ordinary day. A date can have two, such as `Chanukah 6, Rosh Chodesh Tevet`: shortText gives the first, longText gives both |
 | `rosh_chodesh` | boolean | |
 | `shabbat_or_yom_tov_today` | boolean | Whether today's daytime, by the civil calendar, is Shabbat or yom tov |
-| `shabbat_or_yom_tov_tonight` | boolean | Whether one begins at this evening's sunset |
+| `shabbat_or_yom_tov_tonight` | boolean | Whether one begins or continues at this evening's sunset |
 
 The holidays are the yom tovim, with their erev days and Chol HaMoed, plus Chanukah (with the candle count), the fasts (moved off Shabbat as the calendar requires), Tu BiShvat, Purim Katan, Purim, Shushan Purim, Lag BaOmer, and Rosh Chodesh.
 
@@ -51,7 +51,7 @@ Both sources require the caller to hold the Location permission, as `weather/loc
 ## Settings
 
 - **Second days of festivals** (on by default) keeps the second day of Sukkot, Shmini Atzeret/Simchat Torah, Pesach, and Shavuot.
-- **Hebrew script** (off by default) writes dates, month names, holidays, and the `next` label in Hebrew, with Hebrew numerals. Watch fonts often lack Hebrew letters, so the default is transliteration. The numerals use ASCII `'` and `"` for geresh and gershayim, which watch fonts are much likelier to have.
+- **Hebrew script** (off by default) writes dates, month names, holidays, and the `next` label in Hebrew. The default is transliteration because a watch's system fonts have Hebrew letters only if a language pack that includes them is installed. In Hebrew script, the day and year are Hebrew numerals, like the ones for 29 and 5787, whose marks (geresh and gershayim) are written as ASCII `'` and `"`.
 
 ## Building and testing
 
